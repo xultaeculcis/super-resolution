@@ -6,6 +6,8 @@ from app.pages import (
     climate_sr_page,
     sr_page,
     intro_page,
+    sources_page,
+    usage_scenarios_page,
     consts,
 )
 
@@ -13,7 +15,6 @@ from app.pages import (
 st.set_page_config(
     page_title="Super Resolution",
     page_icon="./assets/icon.png",
-    layout="wide",
     initial_sidebar_state="expanded",
 )
 
@@ -27,7 +28,11 @@ elif method == consts.HISTORY_PAGE_NAME:
     history_page()
 elif method == consts.SR_PAGE_NAME:
     sr_page()
+elif method == consts.USAGES_PAGE_NAME:
+    usage_scenarios_page()
 elif method == consts.CLIMATE_SR_PAGE_NAME:
     climate_sr_page()
-else:
+elif method == consts.DEMO_PAGE_NAME:
     predict_page()
+else:
+    sources_page()
