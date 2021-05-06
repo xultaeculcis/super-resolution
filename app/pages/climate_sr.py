@@ -15,7 +15,7 @@ def climate_sr_page():
     st.markdown(
         "In climatology and geospatial sciences **\"downscaling\"** means *'to increase spatial resolution'* e.g., "
         "going from 1/2° grid into 1/8° grid (4x resolution increase). While in image processing world we would "
-        "simply say **\"upscaling\"**. It might be confusing at first..."
+        'simply say **"upscaling"**. It might be confusing at first...'
     )
 
     # ______Problem definition______
@@ -37,7 +37,9 @@ def climate_sr_page():
 
     # ______Implementation details______
     st.header("Implementation details")
-    st.markdown("This section contains implementation details of proposed Neural-Downscaling approach.")
+    st.markdown(
+        "This section contains implementation details of proposed Neural-Downscaling approach."
+    )
 
     # ______Dataset______
     st.markdown("### Dataset")
@@ -78,7 +80,9 @@ def climate_sr_page():
     st.markdown(
         r"The network takes as an input a batch of images of size $N \times C \times H \times W$, where:"
     )
-    st.markdown("* $N$ - the number of training samples in the batch (batch size): in our case 64")
+    st.markdown(
+        "* $N$ - the number of training samples in the batch (batch size): in our case 64"
+    )
     st.markdown(
         "* $C$ - the number of channels: in our case this is 2 - one for climate data and one for elevation data"
     )
