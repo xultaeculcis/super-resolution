@@ -18,6 +18,13 @@ def usage_scenarios_page():
     )
     st.image("./assets/use-cases/suspect-original.png")
     st.image("./assets/use-cases/suspect-enhanced.png")
+    st.markdown(
+        "[Source](https://www1.nyc.gov/site/nypd/services/see-say-something/crimestoppers.page)"
+    )
+    st.markdown(
+        "Application of the SR techniques to enhance surveillance footage is the closest thing that we have to what "
+        "we can see in the CSI TV Series :)"
+    )
 
     # ___________Medical___________
     st.header("Medical Imagery")
@@ -49,6 +56,7 @@ def usage_scenarios_page():
     st.header("Real-World Super Resolution")
     st.image("./assets/use-cases/real-sr.png")
     st.image("./assets/use-cases/real-sr2.png")
+    st.markdown("[Source](https://github.com/Tencent/Real-SR)")
     st.markdown(
         "Real-World Super Resolution: SR can be used to reduce artifacts and noise from real-world images. "
         "Basically you can enhance all of your selfies amd vacation pictures before uploading them to "

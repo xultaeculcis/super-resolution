@@ -6,9 +6,12 @@ from app.pages import consts
 def predict_page():
     st.title(consts.DEMO_PAGE_NAME)
     st.markdown("Here you can test the neural networks.")
+
+    # ----------- Configure
     st.header("Configure")
     st.markdown(
-        "Please select your run configuration first (test and predict new results will depend on it):"
+        "Please select your run configuration first (testing network performance and predicting new results will "
+        "depend on it):"
     )
 
     srcnn = "SRCNN"
@@ -38,6 +41,7 @@ def predict_page():
         options=models,
         index=0,
     )
+
     _ = st.selectbox(
         label="Choose upscale factor",
         options=model_upscale_factors[model],
@@ -50,11 +54,23 @@ def predict_page():
         index=0,
     )
 
+    # ----------- Test performance
     st.header("Test performance")
-    st.markdown("TODO: Upload your HR image")
-    st.markdown("This is a summary of the network performance:")
-    st.markdown("TODO: Plot results: HR, LR, Cubic, SR")
+    hr_upload = st.file_uploader(
+        label="Upload your HR image (max size: 1MB, max resolution: 512x512 px)",
+        type=["png", "jpg", "jpeg"],
+        accept_multiple_files=False,
+    )
+    if hr_upload:
+        st.markdown("This is a summary of the network performance:")
+        st.markdown("TODO: Plot results: HR, LR, Cubic, SR")
 
+    # ----------- Predict new
     st.header("Predict new")
-    st.markdown("TODO: Upload your LR image")
-    st.markdown("TODO: Display download button")
+    lr_upload = st.file_uploader(
+        label="Upload your LR image (max size: 1MB, max resolution: 512x512 px)",
+        type=["png", "jpg", "jpeg"],
+        accept_multiple_files=False,
+    )
+    if lr_upload:
+        st.markdown("TODO: Display download button")
