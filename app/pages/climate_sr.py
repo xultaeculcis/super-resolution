@@ -123,17 +123,17 @@ def climate_sr_page():
     st.markdown("* Train years: 1961-1999")
     st.markdown("* Validation years: 2000-2005")
     st.markdown("* Test years: 2006-2019")
-    st.markdown("* Main performance metric: **RMSE**")
+    st.markdown("* Main performance metric: $RMSE$")
     st.markdown(
         """* Helper metrics:
-    * **MAE**
-    * **MSE**
-    * **PSNR**
-    * **SSIM**
-    * **denormalized MAE**
-    * **denormalized MSE**
-    * **denormalized RMSE**
-    * **denormalized $R^2$**
+    * $MAE$
+    * $MSE$
+    * $PSNR$
+    * $SSIM$
+    * denormalized $MAE$
+    * denormalized $MSE$
+    * denormalized $RMSE$
+    * denormalized $R^2$
     """
     )
 
@@ -181,7 +181,11 @@ def climate_sr_page():
         "Below you can see training progress visualization. Please note on how with each epoch the results become "
         "sharper and more visually pleasing."
     )
-    st.image("./assets/climate-sr/training-progress.gif")
+    epoch = st.slider("Epoch:", 1, 30, 1)
+    st.image(
+        f"./assets/climate-sr/training_progress/sr-gen-pre-training-epoch={epoch-1}.png"
+    )
+
     st.markdown(
         "For training monitoring a tool called Tensorboard was used. It comes configured out of the box with Lightning."
     )
@@ -191,15 +195,27 @@ def climate_sr_page():
     # ______Perceptual results______
     st.header("Perceptual results")
     st.markdown("Below you can see the network inference results.")
+
+    variable_names = [
+        "Minimum temperature",
+        "Average temperature",
+        "Maximum temperature",
+        "Total precipitation",
+    ]
+    variable_codes = ["tmn", "tmp", "tmx", "pre"]
+    variable_to_code_mapping = dict(list(zip(variable_names, variable_codes)))
+    var = st.selectbox(
+        label="Select climate variable:", options=variable_names, index=0
+    )
+    var = variable_to_code_mapping[var]
+
     col1, col2 = st.beta_columns(2)
 
     with col1:
-        st.markdown("LR input raster from CRU-TS (prec, tmin, tmax): ")
-        st.image("./assets/climate-sr/world-clim-temperature.png")
-        st.image("./assets/climate-sr/world-clim-temperature.png")
+        st.markdown(f"LR input raster from CRU-TS ({var}): ")
+        # st.image(f"./assets/climate-sr/results/{var}/cruts-{var}-2018-06-16.tif")
         st.image("./assets/climate-sr/world-clim-temperature.png")
     with col2:
         st.markdown("HR output raster from the network:")
-        st.image("./assets/climate-sr/world-clim-temperature.png")
-        st.image("./assets/climate-sr/world-clim-temperature.png")
+        # st.image(f"./assets/climate-sr/results/{var}/cruts-{var}-2018-06-16.tif")
         st.image("./assets/climate-sr/world-clim-temperature.png")
