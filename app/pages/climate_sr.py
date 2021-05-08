@@ -213,9 +213,9 @@ def climate_sr_page():
 
     with col1:
         st.markdown(f"LR input raster from CRU-TS ({var}): ")
-        # st.image(f"./assets/climate-sr/results/{var}/cruts-{var}-2018-06-16.tif")
+        st.image(f"./assets/climate-sr/results/{var}/cruts-{var}-2018-06-16.tif")
         st.image("./assets/climate-sr/world-clim-temperature.png")
     with col2:
         st.markdown("HR output raster from the network:")
-        # st.image(f"./assets/climate-sr/results/{var}/cruts-{var}-2018-06-16.tif")
+        st.image(f"./assets/climate-sr/results/{var}/cruts-{var}-2018-06-16.tif")
         st.image("./assets/climate-sr/world-clim-temperature.png")
