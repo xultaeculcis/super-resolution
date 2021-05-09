@@ -1,7 +1,20 @@
 # -*- coding: utf-8 -*-
+import pandas as pd
 import streamlit as st
 
 from app.pages import consts
+
+
+def load_metrics(variables, metrics):
+    cols = ["step"]
+    for var in variables:
+        for m in metrics:
+            cols.append(f"{var}/{m}")
+
+    df = pd.read_csv("./assets/climate-sr/metrics.csv")
+    df = df[cols].set_index("step", drop=True)
+
+    return df
 
 
 def climate_sr_page():
@@ -191,19 +204,48 @@ def climate_sr_page():
     )
     st.image("./assets/climate-sr/tensorboard.png")
     st.image("./assets/climate-sr/tensorboard2.png")
+    st.markdown("You can view the metrics here:")
 
-    # ______Perceptual results______
-    st.header("Perceptual results")
-    st.markdown("Below you can see the network inference results.")
-
+    metrics = [
+        "MAE",
+        "MSE",
+        "RMSE",
+        "SSIM",
+        "PSNR",
+        "Denormalized MAE",
+        "Denormalized MSE",
+        "Denormalized RMSE",
+        "Denormalized R2",
+    ]
     variable_names = [
         "Minimum temperature",
         "Average temperature",
         "Maximum temperature",
         "Total precipitation",
     ]
+    variable_codes = ["tmin", "temp", "tmax", "prec"]
+    variable_to_code_mapping = dict(list(zip(variable_names, variable_codes)))
+
+    selected_variables = st.multiselect(
+        label="Choose variables",
+        options=variable_names,
+    )
+    selected_metrics = st.multiselect(label="Choose metrics", options=metrics)
+
+    if selected_variables:
+        if selected_metrics:
+            codes = [variable_to_code_mapping[var] for var in selected_variables]
+            normalized_metrics = ["_".join(m.split()).lower() for m in selected_metrics]
+            df = load_metrics(codes, normalized_metrics)
+            st.line_chart(df)
+
+    # ______Perceptual results______
+    st.header("Perceptual results")
+    st.markdown("Below you can see the network inference results.")
+
     variable_codes = ["tmn", "tmp", "tmx", "pre"]
     variable_to_code_mapping = dict(list(zip(variable_names, variable_codes)))
+
     var = st.selectbox(
         label="Select climate variable:", options=variable_names, index=0
     )
@@ -212,10 +254,21 @@ def climate_sr_page():
     col1, col2 = st.beta_columns(2)
 
     with col1:
-        st.markdown(f"LR input raster from CRU-TS ({var}): ")
-        st.image(f"./assets/climate-sr/results/{var}/cruts-{var}-2018-06-16.tif")
-        st.image("./assets/climate-sr/world-clim-temperature.png")
+        st.markdown(f"LR input ({var} @ 1/2°):")
+        st.image(
+            f"./assets/climate-sr/training_results/lr_original_europe_extent/cruts-{var}-2018-06-16.png"
+        )
     with col2:
-        st.markdown("HR output raster from the network:")
-        st.image(f"./assets/climate-sr/results/{var}/cruts-{var}-2018-06-16.tif")
-        st.image("./assets/climate-sr/world-clim-temperature.png")
+        st.markdown(f"SR output ({var} @ 1/8°):")
+        st.image(
+            f"./assets/climate-sr/training_results/sr_europe_extent/cruts-{var}-2018-06-16.png"
+        )
+
+    col1, col2 = st.beta_columns(2)
+
+    with col1:
+        st.image(
+            f"./assets/climate-sr/training_results/lr_original/cruts-{var}-2018-06-16.png"
+        )
+    with col2:
+        st.image(f"./assets/climate-sr/training_results/sr/cruts-{var}-2018-06-16.png")

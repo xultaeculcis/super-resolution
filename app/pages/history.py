@@ -43,9 +43,7 @@ def history_page():
         "'picture elements')."
     )
     st.markdown("Various practical uses of image resampling are:")
-    st.markdown(
-        "* distortion compensation of optical systems."
-    )
+    st.markdown("* distortion compensation of optical systems.")
     st.markdown("* registration to some standard projection.")
     st.markdown(
         "* registration of images from different sources with one another; for example registering the different bands "
