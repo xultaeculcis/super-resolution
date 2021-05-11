@@ -25,7 +25,7 @@ def load_model(model_name: str, scaling_factor: int, model_version: str) -> Supe
 
         model = SRCNN(**config)
     else:
-        model = SRCNN()
+        raise ValueError(f"Model '{model_name}' is not supported. Supported models: {model_configs.models}")
 
     state_dict = model.state_dict()
     for n, p in torch.load(model_path, map_location=lambda storage, loc: storage).items():

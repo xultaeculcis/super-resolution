@@ -1,7 +1,8 @@
 from typing import Dict, Tuple
 
+import numpy as np
 import torch
-from PIL.Image import Image
+from PIL.Image import Image, fromarray
 from torch import Tensor
 from torchvision import transforms
 from torchmetrics import PSNR, SSIM, MeanAbsoluteError, MeanSquaredError
@@ -50,6 +51,17 @@ class InferenceRunner:
 
     def run_test(self, hr_image: Image) -> Tuple[Image, Image, Image, Dict[str, Dict[str, float]]]:
         hr_w, hr_h = hr_image.size
+
+        w_mod = hr_w % self.upscale_factor
+        h_mod = hr_h % self.upscale_factor
+
+        if w_mod != 0:
+            hr_image = fromarray(np.array(hr_image)[:, :-w_mod])
+            hr_w, hr_h = hr_image.size
+        if h_mod != 0:
+            hr_image = fromarray(np.array(hr_image)[:-h_mod, :])
+            hr_w, hr_h = hr_image.size
+
         downscale = transforms.Resize(
             (hr_h // self.upscale_factor, hr_w // self.upscale_factor),
             interpolation=transforms.InterpolationMode.BICUBIC

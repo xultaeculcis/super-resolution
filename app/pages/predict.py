@@ -89,16 +89,16 @@ def predict_page():
     # ----------- Predict new
     st.header("Predict new")
     lr_upload = st.file_uploader(
-        label="Upload your LR image (max size: 1MB, max resolution: 512x512 px)",
+        label="Upload your LR image (max size: 1MB, max resolution: 256x256 px)",
         type=["png", "jpg", "jpeg"],
         accept_multiple_files=False,
     )
     if lr_upload:
         lr_image = Image.open(lr_upload)
         lr_w, lr_h = lr_image.size
-        if lr_w > 512 or lr_h > 512:
+        if lr_w > 256 or lr_h > 256:
             st.error(
-                f"Uploaded image is too large. Max image resolution is capped at 512x512 px. "
+                f"Uploaded image is too large. Max image resolution is capped at 256x256 px. "
                 f"You uploaded {lr_w}x{lr_h} px."
             )
 
