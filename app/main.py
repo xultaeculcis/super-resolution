@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import streamlit as st
-from app.pages import (
+from pages import (
     history_page,
     predict_page,
     climate_sr_page,
@@ -10,6 +10,8 @@ from app.pages import (
     usage_scenarios_page,
     consts,
 )
+import logging
+logging.basicConfig(level=logging.INFO)
 
 
 st.set_page_config(

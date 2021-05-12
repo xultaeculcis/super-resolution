@@ -5,10 +5,10 @@ from torch import nn, Tensor
 from torchvision import transforms
 from torchvision.transforms import InterpolationMode
 
-from app.inference.models.sr_base import SuperResolutionBaseModel
+from inference.models.sr_base import SuperResolutionBaseModel
 import numpy as np
 
-from app.inference.utils import convert_rgb_to_ycbcr, convert_ycbcr_to_rgb
+from inference.utils import convert_rgb_to_ycbcr, convert_ycbcr_to_rgb
 
 
 class SRCNN(SuperResolutionBaseModel):

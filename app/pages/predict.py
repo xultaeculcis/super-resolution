@@ -5,9 +5,9 @@ from io import BytesIO
 import streamlit as st
 from PIL import Image
 
-from app.pages import consts
-from app.inference.model_configs import models, model_upscale_factors, model_versions
-from app.inference.runner import InferenceRunner
+from pages import consts
+from inference.model_configs import models, model_upscale_factors, model_versions
+from inference.runner import InferenceRunner
 
 
 def predict_page():

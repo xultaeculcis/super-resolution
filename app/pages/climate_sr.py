@@ -2,7 +2,7 @@
 import pandas as pd
 import streamlit as st
 
-from app.pages import consts
+from pages import consts
 
 
 def load_metrics(variables, metrics):

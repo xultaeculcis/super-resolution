@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import streamlit as st
-from app.pages import consts
+from pages import consts
 from glob import glob
 import os
 

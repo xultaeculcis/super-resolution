@@ -7,7 +7,7 @@ from torch import Tensor
 from torchvision import transforms
 from torchmetrics import PSNR, SSIM, MeanAbsoluteError, MeanSquaredError
 
-from app.inference.loader import load_model
+from inference.loader import load_model
 
 
 class InferenceRunner:
