@@ -194,9 +194,30 @@ def climate_sr_page():
         "Below you can see training progress visualization. Please note on how with each epoch the results become "
         "sharper and more visually pleasing."
     )
-    epoch = st.slider("Epoch:", 1, 30, 1)
+    variable_codes = ["tmin", "temp", "tmax", "prec"]
+    variable_names = [
+        "Minimum temperature",
+        "Average temperature",
+        "Maximum temperature",
+        "Total precipitation",
+    ]
+    variable_to_code_mapping = dict(list(zip(variable_names, variable_codes)))
+
+    selected_variables = st.multiselect(
+        label="Choose variables",
+        options=variable_names,
+        key="img_comparison_var_selector"
+    )
+
+    st.markdown("### Without elevation data")
+    epoch_no_elev = st.slider("Epoch:", 1, 30, 1, key="epoch_no_elev")
     st.image(
-        f"./assets/climate-sr/training_progress/sr-gen-pre-training-epoch={epoch-1}.png"
+        f"./assets/climate-sr/training_progress/sr-gen-pre-training-epoch={epoch_no_elev - 1}.png"
+    )
+    st.markdown("### With elevation data")
+    epoch_with_elev = st.slider("Epoch:", 1, 30, 1, key="epoch_with_elev")
+    st.image(
+        f"./assets/climate-sr/training_progress/sr-gen-pre-training-epoch={epoch_with_elev - 1}.png"
     )
 
     st.markdown(
@@ -217,18 +238,10 @@ def climate_sr_page():
         "Denormalized RMSE",
         "Denormalized R2",
     ]
-    variable_names = [
-        "Minimum temperature",
-        "Average temperature",
-        "Maximum temperature",
-        "Total precipitation",
-    ]
-    variable_codes = ["tmin", "temp", "tmax", "prec"]
-    variable_to_code_mapping = dict(list(zip(variable_names, variable_codes)))
-
     selected_variables = st.multiselect(
         label="Choose variables",
         options=variable_names,
+        key="metrics_var_selector"
     )
     selected_metrics = st.multiselect(label="Choose metrics", options=metrics)
 
