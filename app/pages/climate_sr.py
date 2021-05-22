@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from glob import glob
+
 import pandas as pd
 import streamlit as st
 
@@ -109,7 +111,7 @@ def climate_sr_page():
     st.markdown(
         "While training each tile is normalized to fit in range [0;1] using prior knowledge of min and max values from "
         "the parent raster. LR images are generated from HR source images by resizing from 128 $\\times$ 128 "
-        "to 32 $\\times$ 32 and then agiain resizing to 128 $\\times$ 128 nearest-neighbour interpolation. "
+        "to 32 $\\times$ 32 and then again resizing to 128 $\\times$ 128 nearest-neighbour interpolation. "
         "Random vertical, horizontal flips and 90 rotations are applied at training time. This makes the network to "
         "become spatially ignorant to tile geo-location."
     )
@@ -203,23 +205,31 @@ def climate_sr_page():
     ]
     variable_to_code_mapping = dict(list(zip(variable_names, variable_codes)))
 
-    selected_variables = st.multiselect(
+    selected_variable = st.selectbox(
         label="Choose variables",
         options=variable_names,
-        key="img_comparison_var_selector"
+        key="img_comparison_var_selector",
     )
 
     st.markdown("### Without elevation data")
-    epoch_no_elev = st.slider("Epoch:", 1, 30, 1, key="epoch_no_elev")
-    st.image(
-        f"./assets/climate-sr/training_progress/sr-gen-pre-training-epoch={epoch_no_elev - 1}.png"
+    epoch_no_elev = st.slider("Epoch:", 1, 31, 1, key="epoch_no_elev")
+    images = sorted(
+        glob(
+            f"./assets/climate-sr/training_progress/{variable_to_code_mapping[selected_variable]}/no_elev/*.png"
+        )
     )
-    st.markdown("### With elevation data")
-    epoch_with_elev = st.slider("Epoch:", 1, 30, 1, key="epoch_with_elev")
-    st.image(
-        f"./assets/climate-sr/training_progress/sr-gen-pre-training-epoch={epoch_with_elev - 1}.png"
-    )
+    st.image(images[epoch_no_elev - 1])
 
+    st.markdown("### With elevation data")
+    epoch_with_elev = st.slider("Epoch:", 1, 31, 1, key="epoch_with_elev")
+    images = sorted(
+        glob(
+            f"./assets/climate-sr/training_progress/{variable_to_code_mapping[selected_variable]}/with_elev/*.png"
+        )
+    )
+    st.image(images[epoch_with_elev - 1])
+
+    # __________Training Monitoring__________
     st.markdown(
         "For training monitoring a tool called Tensorboard was used. It comes configured out of the box with Lightning."
     )
@@ -239,9 +249,7 @@ def climate_sr_page():
         "Denormalized R2",
     ]
     selected_variables = st.multiselect(
-        label="Choose variables",
-        options=variable_names,
-        key="metrics_var_selector"
+        label="Choose variables", options=variable_names, key="metrics_var_selector"
     )
     selected_metrics = st.multiselect(label="Choose metrics", options=metrics)
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from typing import Optional
 
 from PIL.Image import Image, fromarray
@@ -30,22 +31,24 @@ class SRCNN(SuperResolutionBaseModel):
         w, h = lr_image.size
         upscale = transforms.Resize(
             (h * self.upscale_factor, w * self.upscale_factor),
-            interpolation=InterpolationMode.BICUBIC
+            interpolation=InterpolationMode.BICUBIC,
         )
 
         image = np.array(upscale(lr_image)).astype(np.float32)
         ycbcr = convert_rgb_to_ycbcr(image)
 
         y = ycbcr[..., 0]
-        y /= 255.
+        y /= 255.0
 
         return self.to_tensor(y).unsqueeze(0)
 
-    def postprocess_output(self, prediction: Tensor, lr_image: Optional[Image] = None) -> Image:
+    def postprocess_output(
+        self, prediction: Tensor, lr_image: Optional[Image] = None
+    ) -> Image:
         w, h = lr_image.size
         upscale = transforms.Resize(
             (h * self.upscale_factor, w * self.upscale_factor),
-            interpolation=InterpolationMode.BICUBIC
+            interpolation=InterpolationMode.BICUBIC,
         )
         image = np.array(upscale(lr_image)).astype(np.float32)
 
@@ -53,8 +56,9 @@ class SRCNN(SuperResolutionBaseModel):
 
         prediction = prediction.mul(255.0).cpu().numpy().squeeze(0).squeeze(0)
 
-        output = np.array([prediction, ycbcr[..., 1], ycbcr[..., 2]]).transpose([1, 2, 0])
+        output = np.array([prediction, ycbcr[..., 1], ycbcr[..., 2]]).transpose(
+            [1, 2, 0]
+        )
         output = np.clip(convert_ycbcr_to_rgb(output), 0.0, 255.0).astype(np.uint8)
 
         return fromarray(output)
-

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from typing import Optional
 
 import torch.nn as nn
@@ -26,7 +27,9 @@ class SuperResolutionBaseModel(nn.Module):
         pass
 
     @abstractmethod
-    def postprocess_output(self, prediction: Tensor, lr_image: Optional[Image] = None) -> Image:
+    def postprocess_output(
+        self, prediction: Tensor, lr_image: Optional[Image] = None
+    ) -> Image:
         """
         Handle prediction post-processing like: de-normalization, merging, masking etc.
 

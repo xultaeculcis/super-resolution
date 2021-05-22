@@ -22,6 +22,56 @@ def history_page():
         "resampling for correction of remotely sensed image data (satellite imagery) around the same time."
     )
     st.markdown(
+        "However none of this work made its way into the standard textbooks on image processing [Pratt, "
+        "1978; Gonzalez and Wintz, 1977; Rosenfeld and Kak, 1982] or computer graphics [Foley and van "
+        "Dam, 1982] which were all produced around 1980. The exception to this is Newman and Sproull’s "
+        "[1979] *“Principles of Interactive Computer Graphics”*, but even they only mention the subject in "
+        "passing [ibid., p.265]. The image processing texts do spend time on image restoration, which is "
+        "related to a priori knowledge reconstruction, but none on resampling."
+    )
+    st.markdown(
+        "It was in the eighties that far more interest was paid to digital image resampling. The rush of publications "
+        "was probably due to increased computer power and increased interest in raster displays; both for "
+        "geometrical correction of digital images and for generation of realistic synthetic images. "
+    )
+    st.markdown(
+        "Heckbert [1986] presented a good survey of texture mapping as it was to date. He built on this "
+        "foundation in his masters thesis [Heckbert, 1989], which is a valuable reference for those working "
+        "in texture mapping."
+    )
+    st.markdown(
+        "The work on image resampling reached a milestone in 1990. In that year the first book [Wolberg, "
+        "1990] was published on the subject and the new standard texts [Foley et al 1990; Pratt, 1991] "
+        "included sections on image resampling and its related topics."
+    )
+    st.markdown(
+        "*“Digital Image Warping”* by George Wolberg [1990] is the only existing book on digital image "
+        "resampling. Prior to its publication the only source of information on image resampling was a "
+        "myriad of articles scattered through technical journals and conference proceedings across half a "
+        "dozen fields. Wolberg’s book draws much of this material into one place providing a *“conceptually "
+        "unified, interdisciplinary survey of the field”* [Heckbert, 1991]."
+    )
+    st.markdown(
+        "Wolberg’s book is not, however, the final word on image resampling. His specific aim was to "
+        "emphasise the computational techniques involved rather than any theoretical framework [Wolberg, "
+        "1991]. *“Digital Image Warping”* has its good points [McDonnell, 1991] and its bad [Heckbert, "
+        "1991] but as the only available text it is a useful resource for the study of resampling (for a review "
+        "of the book see Heckbert [1991]; the discussion sparked by this review may be found in Wolberg "
+        "[1991], McDonnell [1991] and Heckbert [1991] - soruces provided on the **Sources** Page)."
+    )
+    st.markdown(
+        "The most recent standard text, Foley, van Dam, Feiner and Hughes [1990] *“Computer Graphics: "
+        "Principles and Practice”*, devotes some considerable space to image resampling and its related "
+        "topics. Its predecessor [Foley and van Dam, 1982] made no mention at all of the subject. This "
+        "reflects the change in emphasis in computer graphics from vector to raster graphics over the "
+        "past decade. The raster display is now the most common *‘soft-copy’* output device [Sproull, "
+        "1986; Fournier and Fussell, 1988], cheap raster displays having been developed in the mid "
+        "70' as an offshoot of the contemporary television technology [Foley and van Dam, 1982]. "
+        "Today it is true to say that *“with only a few specialised exceptions, line [vector] graphics has been "
+        "subsumed by... raster graphics”* [Fiume, 1986, p.2]."
+    )
+    st.header("What is resampling?")
+    st.markdown(
         "Resampling finds uses in many fields. It is usually a step in a larger process, seldom an end in itself and "
         "is most often viewed as a means to an end. In computer graphics resampling allows texture to be applied to "
         "surfaces in computer generated imagery, without the need to explicitly model the texture. In medical and "
@@ -71,7 +121,10 @@ def history_page():
         "a surface to control the shading of that surface in some way."
     )
 
-    st.header("Comparison of resampling filters")
+    # --------Resampling filters--------
+    st.header("Comparison of resampling methods")
+    st.image("./assets/image-enhancement/sampling-algo-comparison.png")
+    st.markdown("[Source](https://en.wikipedia.org/wiki/Bicubic_interpolation)")
 
     original_files = sorted(glob("./assets/image-enhancement/original/*png"))
 
@@ -87,20 +140,25 @@ def history_page():
         "One of the simpler ways of increasing image size is nearest-neighbor interpolation, replacing every pixel "
         "with the nearest pixel in the output; for upscaling this means multiple pixels of the same color will be "
         "present. This can preserve sharp details in pixel art, but also introduce jaggedness in previously smooth "
-        "images. 'Nearest' in nearest-neighbor doesn't have to be the mathematical nearest. One common "
-        "implementation is to always round towards zero. Rounding this way produces fewer artifacts and is faster "
-        "to calculate.",
+        "images. 'Nearest' in nearest-neighbor doesn't have to be the mathematical nearest. The nearest neighbor "
+        "algorithm selects the value of the nearest point and does not consider the values of neighboring points "
+        "at all, yielding a piecewise-constant interpolant. One common implementation is to always round towards zero. "
+        "Rounding this way produces fewer artifacts and is faster to calculate. The diagonal lines of the images, "
+        "tend to show the 'stairway' shape characteristic of nearest-neighbor interpolation. Other scaling methods "
+        "are better at preserving smooth contours in the image.",
         "Spline interpolations are relatively fast, based on polynomial interpolation of order $n$ with $n-1$ "
-        "continuous derivatives. Bilinear interpolation works by interpolating pixel color values, introducing a "
+        "continuous derivatives. Bilinear interpolation is one of the basic resampling techniques in computer vision "
+        "and image processing, where it is also called bilinear filtering or bilinear texture mapping. "
+        "Bilinear interpolation works by interpolating pixel color values, introducing a "
         "continuous transition into the output even where the original material has discrete transitions. "
-        "Although this is desirable for continuous-tone images, this algorithm reduces contrast (sharp edges) in a "
-        "way that may be undesirable for line art. Bicubic interpolation yields substantially better results, with "
-        "an increase in computational cost.",
-        "Bilinear interpolation works by interpolating pixel color values, introducing a continuous transition "
-        "into the output even where the original material has discrete transitions. Although this is desirable for "
-        "continuous-tone images, this algorithm reduces contrast (sharp edges) in a way that may be undesirable "
-        "for line art. Bicubic interpolation yields substantially better results, with an increase in "
-        "computational cost.",
+        "Linear (or bilinear, in two dimensions) interpolation is typically good for changing the size of an image, but"
+        " causes some undesirable softening of details and can still be somewhat jagged. Although this is desirable "
+        "for continuous-tone images, this algorithm reduces contrast (sharp edges) in a way that may be undesirable "
+        "for line art.",
+        "In image processing, bicubic interpolation is often chosen over bilinear or nearest-neighbor interpolation "
+        "in image resampling, when speed is not an issue. In contrast to bilinear interpolation, which only takes "
+        "4 pixels (2×2) into account, bicubic interpolation considers 16 pixels (4×4). Images resampled with bicubic "
+        "interpolation are smoother and have fewer interpolation artifacts.",
         "One weakness of bilinear, bicubic and related algorithms is that they sample a specific number of pixels. "
         "When down scaling below a certain threshold, such as more than twice for all bi-sampling algorithms, the "
         "algorithms will sample non-adjacent pixels, which results in both losing data, and causes rough results. "
@@ -121,6 +179,58 @@ def history_page():
 
     st.image("./assets/image-enhancement/upscaled/comparison_fig.png")
 
+    # --------Metrics--------
+    st.header("Metrics")
+    st.markdown(
+        "In this section we shall discuss the various metrics used to compare the performance of various models."
+    )
+    st.markdown(
+        "1. **PSNR**: Peak Signal to Noise Ratio is the most common technique used to determine the quality of"
+        " results. It can be calculated directly from the MSE using the formula below, where L is the maximum pixel "
+        "value possible (255 for an 8-bit image)."
+    )
+    st.latex(r"PSNR = 10log_{10} (\frac{L^2}{MSE})")
+    st.markdown(
+        "2. **SSIM**: This metric is used to compare the perceptual quality of two images using the formula below, "
+        "with the mean (μ), variance (σ), and correlation (c) of both images."
+    )
+    st.latex(
+        r"SSIM(x, y) = \frac{(2\mu_x\mu_y + c_1)(2\sigma_{xy} + c_2)}{(\mu_x^2 + \mu_y^2 + c_1)(\sigma_x^2 + \sigma_y^2 + c_2)}"  # noqa E501
+    )
+    st.markdown("with:")
+    st.markdown(r"* $x$ - the $HR$ image;")
+    st.markdown(r"* $y$ - the $SR$ image;")
+    st.markdown(r"* $\mu_x$ - the average of $x$;")
+    st.markdown(r"* $\mu_y$ - the average of $y$;")
+    st.markdown(r"* $\sigma_x^2$ - the variance of $x$;")
+    st.markdown(r"* $\sigma_y^2$ - the variance of $y$;")
+    st.markdown(r"* $\sigma_{xy}$ - the covariance of $x$ and $y$;")
+    st.markdown(
+        r"* $c_1 = (k_1L)^2, c_2 = (k_2L)^2$ - two variables to stabilize the division with weak denominator;"
+    )
+    st.markdown(
+        r"* $L$ - the dynamic range of the pixel-values (typically this is $2^{\#bits\_per\_pixel} - 1$);"
+    )
+    st.markdown(r"* $k_1=0.01$ and $k_2=0.03$ by default.")
+    st.markdown(
+        "3. **MOS**: Mean Opinion Score is a manual way to determine the results of a model, where humans are asked to "
+        "rate an image between 0 and 5. The results are aggregated and the average result is used as a metric."
+    )
+    st.markdown(
+        "4. **MSE**: In Statistics, Mean Square Error (MSE) is defined as Mean or Average of the square of the "
+        "difference between actual and estimated values."
+    )
+    st.latex(r"MSE = \frac{1}{N}\sum_{i=0}^{N} (HR_i - SR_i)^2")
+    st.markdown(
+        "5. **RMSE**: Root Mean Square Error (RMSE) is the standard deviation of the residuals (prediction errors). "
+        "Residuals are a measure of how far from the regression line data points are; RMSE is a measure of how spread "
+        "out these residuals are. In other words, it tells you how concentrated the data is around the line of best "
+        "fit. Root mean square error is commonly used in climatology, forecasting, and regression analysis to verify "
+        "experimental results. "
+    )
+    st.latex(r"RMSE = \sqrt{MSE}")
+
+    # --------Closeups--------
     st.header("Closeups")
     st.markdown("If you want to see the individual files here they are:")
 
@@ -154,3 +264,8 @@ def history_page():
                 st.image(
                     f"./assets/image-enhancement/upscaled/{filter_name.upper()}-{basename}"
                 )
+
+    st.markdown(
+        "You can find some more scaling algorithms and their results here: "
+        "[Comparison gallery of image scaling algorithms](https://en.wikipedia.org/wiki/Comparison_gallery_of_image_scaling_algorithms)"  # noqa E501
+    )

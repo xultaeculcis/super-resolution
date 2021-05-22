@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from typing import Dict, Tuple
 
 import numpy as np
@@ -13,11 +14,14 @@ from inference.loader import load_model
 class InferenceRunner:
     def __init__(self, model_name, upscale_factor, model_version=None):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.cpu = "cpu"
 
         self.model_name = model_name
         self.upscale_factor = upscale_factor
         self.model_version = model_version
-        self.model = load_model(model_name, upscale_factor, model_version).to(self.device)
+        self.model = load_model(model_name, upscale_factor, model_version).to(
+            self.device
+        )
 
         self.tensor2pil = transforms.ToPILImage()
         self.to_tensor = transforms.ToTensor()
@@ -32,7 +36,7 @@ class InferenceRunner:
             "SSIM": self.ssim,
             "MAE": self.mae,
             "MSE": self.mse,
-            "RMSE": self._rmse
+            "RMSE": self._rmse,
         }
 
     def _rmse(self, preds: Tensor, target: Tensor) -> Tensor:
@@ -49,7 +53,9 @@ class InferenceRunner:
         with torch.no_grad():
             return self.model(x).clamp(0.0, 1.0)
 
-    def run_test(self, hr_image: Image) -> Tuple[Image, Image, Image, Dict[str, Dict[str, float]]]:
+    def run_test(
+        self, hr_image: Image
+    ) -> Tuple[Image, Image, Image, Dict[str, Dict[str, float]]]:
         hr_w, hr_h = hr_image.size
 
         w_mod = hr_w % self.upscale_factor
@@ -64,28 +70,32 @@ class InferenceRunner:
 
         downscale = transforms.Resize(
             (hr_h // self.upscale_factor, hr_w // self.upscale_factor),
-            interpolation=transforms.InterpolationMode.BICUBIC
+            interpolation=transforms.InterpolationMode.BICUBIC,
         )
         upscale = transforms.Resize(
-            (hr_h, hr_w),
-            interpolation=transforms.InterpolationMode.BICUBIC
+            (hr_h, hr_w), interpolation=transforms.InterpolationMode.BICUBIC
         )
         lr_image = downscale(hr_image)
         sr_cubic = upscale(lr_image)
 
-        preds = self.forward(self.model.preprocess_input(lr_image))
+        preds = self.forward(self.model.preprocess_input(lr_image).to(self.device))
         sr_image = self.model.postprocess_output(preds, lr_image)
 
         metrics_cubic = self._compute_metrics(
-            self.to_tensor(sr_cubic).to(self.device).unsqueeze(0),
-            self.to_tensor(hr_image).to(self.device).unsqueeze(0)
+            self.to_tensor(sr_cubic).to(self.cpu).unsqueeze(0),
+            self.to_tensor(hr_image).to(self.cpu).unsqueeze(0),
         )
         metrics_sr = self._compute_metrics(
-            self.to_tensor(sr_image).to(self.device).unsqueeze(0),
-            self.to_tensor(hr_image).to(self.device).unsqueeze(0)
+            self.to_tensor(sr_image).to(self.cpu).unsqueeze(0),
+            self.to_tensor(hr_image).to(self.cpu).unsqueeze(0),
         )
 
-        return lr_image, sr_cubic, sr_image, {"cubic": metrics_cubic, self.model_name: metrics_sr}
+        return (
+            lr_image,
+            sr_cubic,
+            sr_image,
+            {"cubic": metrics_cubic, self.model_name: metrics_sr},
+        )
 
     def run_inference(self, image: Image) -> Image:
         lr = self.model.preprocess_input(image).to(self.device)

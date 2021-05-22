@@ -11,6 +11,7 @@ from pages import (
     consts,
 )
 import logging
+
 logging.basicConfig(level=logging.INFO)
 
 

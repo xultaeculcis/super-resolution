@@ -578,57 +578,6 @@ def sr_page():
         "fake images more real, but also to make real images look more fake."
     )
 
-    # --------Metrics--------
-    st.header("Metrics")
-    st.markdown(
-        "In this section we shall discuss the various metrics used to compare the performance of various models."
-    )
-    st.markdown(
-        "1. **PSNR**: Peak Signal to Noise Ratio is the most common technique used to determine the quality of"
-        " results. It can be calculated directly from the MSE using the formula below, where L is the maximum pixel "
-        "value possible (255 for an 8-bit image)."
-    )
-    st.latex(r"PSNR = 10log_{10} (\frac{L^2}{MSE})")
-    st.markdown(
-        "2. **SSIM**: This metric is used to compare the perceptual quality of two images using the formula below, "
-        "with the mean (μ), variance (σ), and correlation (c) of both images."
-    )
-    st.latex(
-        r"SSIM(x, y) = \frac{(2\mu_x\mu_y + c_1)(2\sigma_{xy} + c_2)}{(\mu_x^2 + \mu_y^2 + c_1)(\sigma_x^2 + \sigma_y^2 + c_2)}"  # noqa E501
-    )
-    st.markdown("with:")
-    st.markdown(r"* $x$ - the $HR$ image;")
-    st.markdown(r"* $y$ - the $SR$ image;")
-    st.markdown(r"* $\mu_x$ - the average of $x$;")
-    st.markdown(r"* $\mu_y$ - the average of $y$;")
-    st.markdown(r"* $\sigma_x^2$ - the variance of $x$;")
-    st.markdown(r"* $\sigma_y^2$ - the variance of $y$;")
-    st.markdown(r"* $\sigma_{xy}$ - the covariance of $x$ and $y$;")
-    st.markdown(
-        r"* $c_1 = (k_1L)^2, c_2 = (k_2L)^2$ - two variables to stabilize the division with weak denominator;"
-    )
-    st.markdown(
-        r"* $L$ - the dynamic range of the pixel-values (typically this is $2^{\#bits\_per\_pixel} - 1$);"
-    )
-    st.markdown(r"* $k_1=0.01$ and $k_2=0.03$ by default.")
-    st.markdown(
-        "3. **MOS**: Mean Opinion Score is a manual way to determine the results of a model, where humans are asked to "
-        "rate an image between 0 and 5. The results are aggregated and the average result is used as a metric."
-    )
-    st.markdown(
-        "4. **MSE**: In Statistics, Mean Square Error (MSE) is defined as Mean or Average of the square of the "
-        "difference between actual and estimated values."
-    )
-    st.latex(r"MSE = \frac{1}{N}\sum_{i=0}^{N} (HR_i - SR_i)^2")
-    st.markdown(
-        "5. **RMSE**: Root Mean Square Error (RMSE) is the standard deviation of the residuals (prediction errors). "
-        "Residuals are a measure of how far from the regression line data points are; RMSE is a measure of how spread "
-        "out these residuals are. In other words, it tells you how concentrated the data is around the line of best "
-        "fit. Root mean square error is commonly used in climatology, forecasting, and regression analysis to verify "
-        "experimental results. "
-    )
-    st.latex(r"RMSE = \sqrt{MSE}")
-
     # --------SOTA--------
     st.header("What are the best models?")
     st.markdown(

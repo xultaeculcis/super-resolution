@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Model names
 SRCNN = "srcnn"
 
