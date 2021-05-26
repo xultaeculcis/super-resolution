@@ -7,4 +7,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 80
 
-CMD streamlit run /usr/src/app/main.py
+CMD streamlit run /usr/src/app/main.py --server.port 80
