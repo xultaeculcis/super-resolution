@@ -59,8 +59,8 @@ def sr_page():
         "As you might have guessed, the final reconstruction layer reconstructs the high resolution image. "
     )
     st.markdown(
-        "The MSE loss function is used to train the network, and PSNR (discussed below in the Metrics section) "
-        "is used to evaluate the results. We will talk about both of these in more detail later on."
+        "The MSE loss function is used to train the network, and PSNR (discussed in the Metrics section) "
+        "is used to evaluate the results."
     )
     # --------VDSR--------
     st.markdown("### VDSR")
